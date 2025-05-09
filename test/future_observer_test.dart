@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:future_observer/future_observer.dart';
 
+import '../lib/future_observer.dart';
+
 void main() {
   test('adds one to input values', () {
     // final calculator = Calculator();
@@ -9,4 +11,11 @@ void main() {
     // expect(calculator.addOne(-7), -6);
     // expect(calculator.addOne(0), 1);
   });
+  FutureObserver futureObserver = FutureObserver();
+  futureObserver.register(
+    event: 'testEvent',
+    callback: () async {
+      print('testEvent callback executed');
+    },
+  ); 
 }
