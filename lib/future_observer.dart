@@ -29,7 +29,7 @@ class FutureObserver implements BaseFutureObserver {
   }
 
   @override
-  run([String event]) {
+  run([String? event]) {
     // TODO: implement run
     throw UnimplementedError();
   }
@@ -51,7 +51,7 @@ class FutureObserver implements BaseFutureObserver {
   }
 
   @override
-  wait([String event]) {
+  wait([String? event]) {
     // TODO: implement wait
     throw UnimplementedError();
   }

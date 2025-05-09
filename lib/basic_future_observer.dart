@@ -23,9 +23,9 @@ abstract class BaseFutureObserver {
   // 判断单个是否被注册
   bool registered(String event);
 
-  // 运行单个或多个事件
+  // 运行单个/多个/全部事件
   run([String event]);
 
-  // 等待单个或多个事件执行完毕
+  // 等待单个/多个/全部事件执行完毕
   wait([String event]);
 }
