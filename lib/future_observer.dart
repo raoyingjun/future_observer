@@ -8,6 +8,10 @@ class FutureObserver implements BaseFutureObserver {
   @override
   void register(String event, [Future? callback]) {
     // TODO: implement register
+    _storage.putIfAbsent(event, () => []);
+    if (callback != null) {
+      _storage[event]!.add(callback);
+    }
   }
 
   @override
@@ -19,6 +23,7 @@ class FutureObserver implements BaseFutureObserver {
   @override
   bool registered(String event) {
     // TODO: implement registered
+    return _storage.containsKey(event);
     throw UnimplementedError();
   }
 
@@ -37,6 +42,18 @@ class FutureObserver implements BaseFutureObserver {
   @override
   void unregister(String event, Future callback) {
     // TODO: implement unregister
+    if (event != null) {
+      if (callback != null) {
+        _storage[event]?.remove(callback);
+        if (_storage[event]?.isEmpty ?? false) {
+          _storage.remove(event);
+        }
+      } else {
+        _storage.remove(event);
+      }
+    } else {
+      _storage.clear();
+    }
   }
 
   @override
