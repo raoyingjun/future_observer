@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
 
 import 'observable_future.dart';
 
@@ -12,16 +12,10 @@ class FutureObserver implements ObservableFuture {
     ReturnFutureCallback callback,
     Future Function(ReturnFutureCallback callback) wrappedCallback,
   ) {
-    // 拿到 future 关联 callback
+    // 将行为抛给用户自行处理，等待用户返回 future
     final future = wrappedCallback(callback);
-
+    // future 观察 callback
     return _storage[callback] = future;
-  }
-
-  @override
-  bool done(ReturnFutureCallback callback) {
-    // TODO: implement done
-    throw UnimplementedError();
   }
 
   @override
@@ -35,22 +29,17 @@ class FutureObserver implements ObservableFuture {
   }
 
   @override
-  bool running(ReturnFutureCallback callback) {
-    // TODO: implement running
-    throw UnimplementedError();
-  }
-
-  @override
   Future? wait(ReturnFutureCallback callback) {
     return _storage[callback];
   }
 
   @override
-  void clear(ReturnFutureCallback callback) {
-    return _storage.clear();
+  void clear() {
+    _storage.clear();
   }
 }
 
+// 暂不需要
 // final class FutureRecord {
 //   Future future;
 //   bool done;
