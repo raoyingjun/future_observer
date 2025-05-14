@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'observable_future.dart';
 
 /// A Future State Observer.
@@ -5,13 +7,12 @@ class FutureObserver implements ObservableFuture {
   // 所有待处理的任务，由子类实现
   final Map<ReturnFutureCallback, Future> _storage = {};
 
-  /// @param {callback} 要观察的函数
-  /// @param {wrappedCallback} 用于接受 Future，与要观察的函数关联
   @override
   Future observe(
     ReturnFutureCallback callback,
     Future Function(ReturnFutureCallback callback) wrappedCallback,
   ) {
+    // 拿到 future 关联 callback
     final future = wrappedCallback(callback);
 
     return _storage[callback] = future;
@@ -24,20 +25,13 @@ class FutureObserver implements ObservableFuture {
   }
 
   @override
-  void ignore(ReturnFutureCallback callback) {
-    // TODO: implement ignore
+  Future? ignore(ReturnFutureCallback callback) {
+    return _storage.remove(callback);
   }
 
   @override
   bool observed(ReturnFutureCallback callback) {
-    // TODO: implement observed
-    throw UnimplementedError();
-  }
-
-  @override
-  bool revoke(ReturnFutureCallback callback) {
-    // TODO: implement revoke
-    throw UnimplementedError();
+    return _storage.containsKey(callback);
   }
 
   @override
@@ -47,34 +41,27 @@ class FutureObserver implements ObservableFuture {
   }
 
   @override
-  Future wait(ReturnFutureCallback callback) {
-    // TODO: implement wait
-    throw UnimplementedError();
+  Future? wait(ReturnFutureCallback callback) {
+    return _storage[callback];
   }
 
-  // @override
-  // void run(String event, [Future? callback]) {
-  //   _storage.putIfAbsent(event);
-  //   if (callback != null) {
-  //     _storage[event]!.add(callback);
-  //   }
-  // }
-  //
-  //
-  // @override
-  // void unregister(String event, Future callback) {
-  //   // TODO: implement unregister
-  //   if (event != null) {
-  //     if (callback != null) {
-  //       _storage[event]?.remove(callback);
-  //       if (_storage[event]?.isEmpty ?? false) {
-  //         _storage.remove(event);
-  //       }
-  //     } else {
-  //       _storage.remove(event);
-  //     }
-  //   } else {
-  //     _storage.clear();
-  //   }
-  // }
+  @override
+  void clear(ReturnFutureCallback callback) {
+    return _storage.clear();
+  }
 }
+
+// final class FutureRecord {
+//   Future future;
+//   bool done;
+//   bool running;
+//
+//   FutureRecord({required this.future, this.done = false, this.running = true});
+//
+//   FutureRecord.of(this.future) : done = false, running = false;
+//
+//   complete() {
+//     done = true;
+//     running = false;
+//   }
+// }
