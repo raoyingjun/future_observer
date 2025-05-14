@@ -1,75 +1,80 @@
-import 'basic_future_observer.dart';
+import 'observable_future.dart';
 
 /// A Future State Observer.
-class FutureObserver implements BaseFutureObserver {
-  @override
-  Map<String, List<Future>> _storage = {};
+class FutureObserver implements ObservableFuture {
+  // 所有待处理的任务，由子类实现
+  final Map<ReturnFutureCallback, Future> _storage = {};
 
+  /// @param {callback} 要观察的函数
+  /// @param {wrappedCallback} 用于接受 Future，与要观察的函数关联
   @override
-  void register(String event, [Future? callback]) {
-    // TODO: implement register
-    _storage.putIfAbsent(event, () => []);
-    if (callback != null) {
-      _storage[event]!.add(callback);
-    }
+  Future observe(
+    ReturnFutureCallback callback,
+    Future Function(ReturnFutureCallback callback) wrappedCallback,
+  ) {
+    final future = wrappedCallback(callback);
+
+    return _storage[callback] = future;
   }
 
   @override
-  List<Future> registerOf(String event) {
-    // TODO: implement registerOf
+  bool done(ReturnFutureCallback callback) {
+    // TODO: implement done
     throw UnimplementedError();
   }
 
   @override
-  bool registered(String event) {
-    // TODO: implement registered
-    return _storage.containsKey(event);
+  void ignore(ReturnFutureCallback callback) {
+    // TODO: implement ignore
+  }
+
+  @override
+  bool observed(ReturnFutureCallback callback) {
+    // TODO: implement observed
     throw UnimplementedError();
   }
 
   @override
-  Map<String, List<Future>> registers() {
-    // TODO: implement registers
+  bool revoke(ReturnFutureCallback callback) {
+    // TODO: implement revoke
     throw UnimplementedError();
   }
 
   @override
-  run([String? event]) {
-    // TODO: implement run
+  bool running(ReturnFutureCallback callback) {
+    // TODO: implement running
     throw UnimplementedError();
   }
 
   @override
-  void unregister(String event, Future callback) {
-    // TODO: implement unregister
-    if (event != null) {
-      if (callback != null) {
-        _storage[event]?.remove(callback);
-        if (_storage[event]?.isEmpty ?? false) {
-          _storage.remove(event);
-        }
-      } else {
-        _storage.remove(event);
-      }
-    } else {
-      _storage.clear();
-    }
-  }
-
-  @override
-  int unregister0f(String event) {
-    // TODO: implement unregister0f
-    throw UnimplementedError();
-  }
-
-  @override
-  void unregisters() {
-    // TODO: implement unregisters
-  }
-
-  @override
-  wait([String? event]) {
+  Future wait(ReturnFutureCallback callback) {
     // TODO: implement wait
     throw UnimplementedError();
   }
+
+  // @override
+  // void run(String event, [Future? callback]) {
+  //   _storage.putIfAbsent(event);
+  //   if (callback != null) {
+  //     _storage[event]!.add(callback);
+  //   }
+  // }
+  //
+  //
+  // @override
+  // void unregister(String event, Future callback) {
+  //   // TODO: implement unregister
+  //   if (event != null) {
+  //     if (callback != null) {
+  //       _storage[event]?.remove(callback);
+  //       if (_storage[event]?.isEmpty ?? false) {
+  //         _storage.remove(event);
+  //       }
+  //     } else {
+  //       _storage.remove(event);
+  //     }
+  //   } else {
+  //     _storage.clear();
+  //   }
+  // }
 }
